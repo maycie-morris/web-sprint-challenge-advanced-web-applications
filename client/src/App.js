@@ -12,7 +12,7 @@ function App() {
       <div className="App">
 
         <Link to='/'>Login</Link>
-        {/* <Link to='/BubblePage'>Bubbles!</Link> */}
+        <Link to='/protected'>Bubbles!</Link>
 
         <Switch>
 
@@ -24,7 +24,7 @@ function App() {
             <Login />
           </Route>
 
-          <PrivateRoute exact path="/BubblePage" component={BubblePage} />
+          <PrivateRoute exact path="/protected" component={BubblePage} />
 
 
         {/* 

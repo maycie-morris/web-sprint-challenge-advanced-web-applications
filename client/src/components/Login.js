@@ -28,7 +28,7 @@ const Login = () => {
       .post('/login', credentials)
       .then((res) => {
         window.localStorage.setItem('token', res.data.payload)
-        history.push('/BubblesPage')
+        history.push('/protected')
       })
       .catch((err) => {
         console.log(err)

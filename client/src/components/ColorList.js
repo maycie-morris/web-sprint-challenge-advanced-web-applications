@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { useParams, useHistory } from 'react-router-dom';
 
 import axiosWithAuth from '../utils/axiosWithAuth'
 
@@ -9,10 +7,18 @@ const initialColor = {
   code: { hex: "" }
 };
 
+// STRETCH
+
+const addColor = {
+  color: "",
+  code: { hex: ""}
+}
+
 const ColorList = ({ colors, updateColors }) => {
   console.log(colors);
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
+  const [colorToAdd, setColorToAdd] = useState(addColor)
 
   const editColor = color => {
     setEditing(true);
@@ -28,7 +34,7 @@ const ColorList = ({ colors, updateColors }) => {
     axiosWithAuth()
       .put(`/colors/${colorToEdit.id}`, colorToEdit)
       .then((res) => {
-        updateColors(res.data)
+        updateColors(colors.map((col) => col.id === res.data.id ? res.data : col))
       })
       .catch((err) => {
         console.log(err)
@@ -40,13 +46,45 @@ const ColorList = ({ colors, updateColors }) => {
 
     axiosWithAuth()
       .delete(`/colors/${color.id}`)
+      .then(() => {
+        updateColors(colors.filter((col) => col.id !== color.id))
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  };
+
+  // STRETCH
+
+  const handleChange = e => {
+    setColorToAdd({
+      ...colorToAdd,
+      code: {
+        [e.target.name] : e.target.value
+      }
+    })
+  }
+
+  const handleColor = e => {
+    setColorToAdd({
+      ...colorToAdd,
+      code: {
+        [e.target.name] : e.target.value
+      }
+    })
+  }
+
+  const additionalColor = e => {
+    e.preventDefault();
+    axiosWithAuth()
+      .post('/colors', addColor)
       .then((res) => {
         updateColors(res.data)
       })
       .catch((err) => {
         console.log(err)
       })
-  };
+  }
 
   return (
     <div className="colors-wrap">
@@ -101,8 +139,35 @@ const ColorList = ({ colors, updateColors }) => {
           </div>
         </form>
       )}
-      <div className="spacer" />
+
       {/* stretch - build another form here to add a color */}
+
+      <div className="add-color">
+        <form onSubmit={ additionalColor }>
+          <label htmlFor="color">
+            <input
+              type="text"
+              id="color"
+              name="color"
+              placeholder="Color Name"
+              value={colorToAdd.color}
+              onChange={ handleChange }
+            />
+          </label>
+          <label htmlFor="code">
+            <input
+              type="text"
+              id="color"
+              name="color"
+              placeholder="HEX Code"
+              value={colorToAdd.code.hex}
+              onChange={ handleColor }
+            />
+          </label>
+          <button className="add-color-button" type="submit">Add New Color</button>
+        </form>
+      </div>
+      <div className="spacer" />
     </div>
   );
 };
