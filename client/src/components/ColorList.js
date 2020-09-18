@@ -59,9 +59,7 @@ const ColorList = ({ colors, updateColors }) => {
   const handleChange = e => {
     setColorToAdd({
       ...colorToAdd,
-      code: {
-        [e.target.name] : e.target.value
-      }
+        color : e.target.value
     })
   }
 
@@ -69,7 +67,7 @@ const ColorList = ({ colors, updateColors }) => {
     setColorToAdd({
       ...colorToAdd,
       code: {
-        [e.target.name] : e.target.value
+        hex : e.target.value
       }
     })
   }
@@ -77,7 +75,7 @@ const ColorList = ({ colors, updateColors }) => {
   const additionalColor = e => {
     e.preventDefault();
     axiosWithAuth()
-      .post('/colors', addColor)
+      .post('/colors', colorToAdd)
       .then((res) => {
         updateColors(res.data)
       })
