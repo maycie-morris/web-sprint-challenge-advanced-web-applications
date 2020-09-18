@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useHistory } from 'react-router-dom'
-import axios from 'axios'
 
-import { axiousWithAuth, axiosWithAuth } from '../utils/axiosWithAuth'
+import axiosWithAuth  from '../utils/axiosWithAuth'
 
 const Login = () => {
   // make a post request to retrieve a token from the api
@@ -55,7 +54,7 @@ const Login = () => {
             </label>
             <label htmlFor="password">
               <input
-                type="text"
+                type="password"
                 id="password"
                 name="password"
                 placeholder="Enter password"
